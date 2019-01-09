@@ -2,7 +2,7 @@ const fs = require('fs');
 const ua = require('useragent-generator');
 const range = require('lodash.range');
 const request = require('request');
-const queue = require('queue-async');
+const {queue} = require('d3-queue');
 
 const browsers = {};
 

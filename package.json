@@ -2,16 +2,31 @@
   "name": "@datawrapper/polyfills",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/getBrowser.js",
+  "module": "dist/getBrowser.mjs",
+  "umd:main": "dist/getBrowser.umd.js",
+  "source": "src/getBrowser.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublishOnly": "npm test && npm run build",
+    "test": "ava",
+    "dev": "microbundle --watch",
+    "build": "microbundle",
+    "download": "download-polyfills.js"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
+    "ava": "^1.0.1",
+    "d3-queue": "^3.0.7",
+    "esm": "^3.0.84",
     "lodash.range": "^3.2.0",
-    "queue-async": "^1.2.1",
+    "microbundle": "^0.9.0",
     "request": "^2.88.0",
     "useragent-generator": "^1.1.0"
+  },
+  "ava": {
+    "require": [
+      "esm"
+    ]
   }
 }
