@@ -13,7 +13,7 @@
     "build": "microbundle",
     "download": "download-polyfills.js"
   },
-  "author": "",
+  "author": "Gregor Aisch",
   "license": "ISC",
   "devDependencies": {
     "ava": "^1.0.1",
