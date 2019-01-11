@@ -1,17 +1,18 @@
 import getVersion from './getBrowserVersion.js';
 
-export default function() {
-    // Opera 8.0+
-    const isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-
+export default function () {
     // Firefox 1.0+
     const isFirefox = typeof InstallTrigger !== 'undefined';
 
     // Safari 3.0+ "[object HTMLElementConstructor]"
-    const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+    const isSafari =
+        /constructor/i.test(window.HTMLElement) ||
+        (function (p) {
+            return p.toString() === '[object SafariRemoteNotification]';
+        })(!window['safari'] || window.safari.pushNotification);
 
     // Internet Explorer 6-11
-    const isIE = /*@cc_on!@*/false || !!document.documentMode;
+    const isIE = /* @cc_on!@ */ false || !!document.documentMode;
 
     // Edge 20+
     const isEdge = !isIE && !!window.StyleMedia;
@@ -19,19 +20,20 @@ export default function() {
     // Chrome or Chromium 1+
     const isChrome = !!window.chrome && !!window.chrome.loadTimes;
 
-    // Blink engine detection
-    const isBlink = (isChrome || isOpera) && !!window.CSS;
+    const browser = isChrome
+        ? 'chrome'
+        : isFirefox
+            ? 'firefox'
+            : isSafari
+                ? 'safari'
+                : isIE
+                    ? 'ie'
+                    : isEdge
+                        ? 'edge'
+                        : false;
 
-    const browser = isChrome ? 'chrome' :
-        isFirefox ? 'firefox' :
-        isSafari ? 'safari' :
-        isIE ? 'ie' :
-        isEdge ? 'edge' :
-        false;
+    const version =
+        browser && getVersion[browser] ? getVersion[browser](navigator.userAgent) : false;
 
-    const version = browser && getVersion[browser] ?
-        getVersion[browser](navigator.userAgent) :
-        false;
-
-    return { browser:browser, version: version };
+    return { browser: browser, version: version };
 }

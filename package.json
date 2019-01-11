@@ -11,22 +11,52 @@
     "test": "ava",
     "dev": "microbundle --watch",
     "build": "microbundle --name=getBrowser",
-    "download": "download-polyfills.js"
+    "download": "download-polyfills.js",
+    "lint": "eslint src download-polyfills.js",
+    "format": "prettier src/**/*.js download-polyfills.js --write && eslint src --fix"
   },
   "author": "Gregor Aisch",
   "license": "ISC",
   "devDependencies": {
-    "ava": "^1.0.1",
-    "d3-queue": "^3.0.7",
-    "esm": "^3.0.84",
-    "lodash.range": "^3.2.0",
-    "microbundle": "^0.9.0",
-    "request": "^2.88.0",
-    "useragent-generator": "^1.1.0"
+    "ava": "~1.0.1",
+    "d3-queue": "~3.0.7",
+    "eslint": "~5.12.0",
+    "eslint-config-standard": "~12.0.0",
+    "eslint-plugin-import": "~2.14.0",
+    "eslint-plugin-node": "~8.0.1",
+    "eslint-plugin-promise": "~4.0.1",
+    "eslint-plugin-standard": "~4.0.0",
+    "esm": "~3.0.84",
+    "husky": "~1.3.1",
+    "lint-staged": "~8.1.0",
+    "lodash.range": "~3.2.0",
+    "microbundle": "~0.9.0",
+    "prettier": "~1.15.3",
+    "request": "~2.88.0",
+    "tap-xunit": "~2.3.0",
+    "useragent-generator": "~1.1.0"
   },
   "ava": {
     "require": [
       "esm"
+    ]
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "semi": true,
+    "printWidth": 100,
+    "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
     ]
   }
 }

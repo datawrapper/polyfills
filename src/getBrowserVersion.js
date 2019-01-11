@@ -1,8 +1,8 @@
-function getVersion(RE) {
-    return function(userAgent) {
+function getVersion (RE) {
+    return function (userAgent) {
         const raw = userAgent.toLowerCase().match(RE);
         return raw ? parseInt(raw[1], 10) : false;
-    }
+    };
 }
 
 export default {
@@ -11,4 +11,4 @@ export default {
     safari: getVersion(/version\/([0-9]+).[0-9]+.[0-9]+ safari/),
     ie: getVersion(/(?:msie |rv:)([0-9]+).[0-9]+/),
     edge: getVersion(/edge\/([0-9]+).[0-9]+.[0-9]+/)
-}
+};
