@@ -2,3 +2,4 @@ src/*
 polyfills/*
 node_modules/*
 download-polyfills.js
+.circleci/*
