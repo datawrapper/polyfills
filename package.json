@@ -33,6 +33,7 @@
     "microbundle": "~0.9.0",
     "prettier": "~1.15.3",
     "request": "~2.88.0",
+    "tap-xunit": "~2.3.0",
     "useragent-generator": "~1.1.0"
   },
   "ava": {
