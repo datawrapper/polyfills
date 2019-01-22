@@ -1,3 +1,5 @@
+/* eslint-env node */
+/* eslint no-console: "off" */
 const fs = require('fs');
 const ua = require('useragent-generator');
 const range = require('lodash.range');
