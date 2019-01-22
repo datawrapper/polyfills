@@ -63,7 +63,7 @@ jobs:
 
 workflows:
   version: 2
-  do_what_you_have_to_do:
+  install, test, lint, and publish:
     jobs:
       - install:
           filters:
