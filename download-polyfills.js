@@ -25,7 +25,7 @@ const q = queue(10);
 
 const load = (key, ua, callback) => {
     console.log('loading', key);
-    request(`https://cdn.polyfill.io/v2/polyfill.min.js?ua=${ua}`, (err, res, body) => {
+    request(`https://cdn.polyfill.io/v3/polyfill.min.js?ua=${ua}`, (err, res, body) => {
         if (!err) {
             fs.writeFile(`polyfills/${key}.js`, body, err => {
                 if (!err) callback();
@@ -37,6 +37,8 @@ const load = (key, ua, callback) => {
 Object.keys(browsers).forEach(key => {
     q.defer(load, key, browsers[key]);
 });
+
+q.defer(load, 'all', 'all-browsers');
 
 q.awaitAll(() => {
     console.log('all done!');
