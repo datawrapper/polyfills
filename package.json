@@ -16,13 +16,14 @@
     "build": "microbundle --name=getBrowser",
     "download": "scripts/download-polyfills.js",
     "upload": "make upload",
-    "lint": "eslint src download-polyfills.js",
-    "format": "prettier src/**/*.js download-polyfills.js --write && eslint src --fix"
+    "lint": "eslint src scripts",
+    "format": "prettier src/**/*.js scripts/*.js --write && eslint src scripts --fix"
   },
   "author": "Gregor Aisch",
   "license": "ISC",
   "devDependencies": {
     "ava": "~1.0.1",
+    "babel-eslint": "^10.0.1",
     "d3-queue": "~3.0.7",
     "eslint": "~5.12.0",
     "eslint-config-standard": "~12.0.0",
