@@ -2,14 +2,14 @@ import test from 'ava';
 import ua from 'useragent-generator';
 import range from 'lodash.range';
 
-import getBrowserVersion from './getBrowserVersion.js';
+import getBrowserVersion, { getLatestVersionNumber } from './getBrowserVersion.js';
 
 const browsers = {
-    firefox: [30, 66],
-    chrome: [20, 74],
-    ie: [6, 11],
-    edge: [12, 18],
-    safari: [6, 12]
+    firefox: [30, getLatestVersionNumber('firefox')],
+    chrome: [20, getLatestVersionNumber('chrome')],
+    ie: [6, getLatestVersionNumber('ie')],
+    edge: [12, getLatestVersionNumber('edge')],
+    safari: [6, getLatestVersionNumber('safari')]
 };
 
 Object.keys(browsers).forEach(browser => {

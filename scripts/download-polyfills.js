@@ -5,15 +5,9 @@ const ua = require('useragent-generator');
 const range = require('lodash.range');
 const request = require('request');
 const { queue } = require('d3-queue');
-const { getLatestStableBrowsers } = require('caniuse-api');
+const { getLatestVersionNumber } = require('../src/getBrowserVersion');
 
 const browsers = {};
-
-function getLatestVersionNumber (browser) {
-    return +getLatestStableBrowsers()
-        .find(val => val.includes(browser))
-        .split(' ')[1];
-}
 
 const versions = {
     firefox: [30, getLatestVersionNumber('firefox')],
