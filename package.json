@@ -58,10 +58,13 @@
     }
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ]
+    "linters": {
+      "*.js": [
+        "prettier --write",
+        "eslint --fix",
+        "git add"
+      ]
+    },
+    "ignore": ["**/polyfills/*.js"]
   }
 }

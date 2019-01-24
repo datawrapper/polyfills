@@ -9,8 +9,8 @@ const { queue } = require('d3-queue');
 const browsers = {};
 
 const versions = {
-    firefox: [30, 66],
-    chrome: [20, 74],
+    firefox: [30, 51],
+    chrome: [20, 54],
     ie: [6, 11],
     edge: [12, 18],
     safari: [6, 12]
@@ -27,13 +27,16 @@ const q = queue(10);
 
 const load = (key, ua, callback) => {
     console.log('loading', key);
-    request(`https://cdn.polyfill.io/v3/polyfill.min.js?ua=${ua}`, (err, res, body) => {
-        if (!err) {
-            fs.writeFile(`polyfills/${key}.js`, body, err => {
-                if (!err) callback();
-            });
+    request(
+        `https://cdn.polyfill.io/v3/polyfill.min.js?features=default,Array.prototype.includes,fetch&ua=${ua}`,
+        (err, res, body) => {
+            if (!err) {
+                fs.writeFile(`polyfills/${key}.js`, body, err => {
+                    if (!err) callback();
+                });
+            }
         }
-    });
+    );
 };
 
 Object.keys(browsers).forEach(key => {
