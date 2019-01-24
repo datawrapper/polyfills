@@ -5,15 +5,22 @@ const ua = require('useragent-generator');
 const range = require('lodash.range');
 const request = require('request');
 const { queue } = require('d3-queue');
+const { getLatestStableBrowsers } = require('caniuse-api');
 
 const browsers = {};
 
+function getLatestVersionNumber (browser) {
+    return +getLatestStableBrowsers()
+        .find(val => val.includes(browser))
+        .split(' ')[1];
+}
+
 const versions = {
-    firefox: [30, 51],
-    chrome: [20, 54],
-    ie: [6, 11],
-    edge: [12, 18],
-    safari: [6, 12]
+    firefox: [30, getLatestVersionNumber('firefox')],
+    chrome: [20, getLatestVersionNumber('chrome')],
+    ie: [6, getLatestVersionNumber('ie')],
+    edge: [12, getLatestVersionNumber('edge')],
+    safari: [6, getLatestVersionNumber('safari')]
 };
 
 Object.keys(versions).forEach(browser => {
@@ -28,7 +35,7 @@ const q = queue(10);
 const load = (key, ua, callback) => {
     console.log('loading', key);
     request(
-        `https://cdn.polyfill.io/v3/polyfill.min.js?features=default,Array.prototype.includes,fetch&ua=${ua}`,
+        `https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features=default,Array.prototype.includes,fetch&ua=${ua}`,
         (err, res, body) => {
             if (!err) {
                 fs.writeFile(`polyfills/${key}.js`, body, err => {
