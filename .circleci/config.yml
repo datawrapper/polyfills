@@ -74,7 +74,7 @@ jobs:
             command: sudo pip install awscli
         - run:
             name: Upload to S3
-            command: aws s3 cp --acl public-read --recursive polyfills/ s3://datawrapper.dwcdn.net/lib/polyfills/
+            command: aws s3 cp --acl public-read --recursive ~/repo/polyfills/ s3://datawrapper.dwcdn.net/lib/polyfills/
 
 workflows:
   version: 2
