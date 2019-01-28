@@ -69,6 +69,7 @@ jobs:
   deploy_polyfills:
       <<: *python
       steps:
+        - checkout
         - run:
             name: Install AWS CLI
             command: sudo pip install awscli

@@ -13,7 +13,7 @@ All polyfills will get deployed to AWS S3 when pushing a version tag to Github a
 > git push --follow-tags
 ```
 
-These 2 commands will tell CircleCI to publish the new version to npm and deploy the polyfills to the Datawrapper CDN.
+These 2 commands will tell CircleCI to publish the new version to npm and deploy the polyfills to the Datawrapper CDN. By doing this with CircleCI the npm package and versions on AWS will always stay in sync.
 
 ---
 
