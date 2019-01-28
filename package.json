@@ -14,7 +14,7 @@
     "test": "ava",
     "dev": "microbundle --watch",
     "build": "microbundle --name=getBrowser",
-    "download": "scripts/download-polyfills.js",
+    "download": "node -r esm scripts/download-polyfills.js",
     "upload": "make upload",
     "lint": "eslint src scripts",
     "format": "prettier src/**/*.js scripts/*.js --write && eslint src scripts --fix"
