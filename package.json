@@ -1,6 +1,6 @@
 {
   "name": "@datawrapper/polyfills",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "main": "dist/getBrowser.js",
   "module": "dist/getBrowser.mjs",
