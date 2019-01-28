@@ -3,6 +3,11 @@ defaults: &defaults
   docker:
     - image: circleci/node:10
 
+python: &python
+  working_directory: ~/repo
+  docker:
+    - image: circleci/python:2.7-jessie
+
 cache: &cache
     key: v1-dependency-cache-{{ checksum "package-lock.json" }}
 
@@ -61,6 +66,16 @@ jobs:
           name: Publish Package
           command: npm publish
 
+  deploy_polyfills:
+      <<: *python
+      steps:
+        - run:
+            name: Install AWS CLI
+            command: sudo pip install awscli
+        - run:
+            name: Upload to S3
+            command: aws s3 cp --acl public-read --recursive polyfills/ s3://datawrapper.dwcdn.net/lib/polyfills/
+
 workflows:
   version: 2
   install, test, lint, and publish:
@@ -85,6 +100,17 @@ workflows:
             - install
 
       - publish:
+          context: Deployment Keys
+          requires:
+            - test
+            - lint
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+
+      - deploy_polyfills:
           context: Deployment Keys
           requires:
             - test
