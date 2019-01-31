@@ -18,3 +18,4 @@ These 2 commands will tell CircleCI to publish the new version to npm and deploy
 ---
 
 *There is no need to set up the `aws` CLI and deploy manually. It is still possible if needed! To manually deploy polyfills run `make upload`. Make sure the `aws` CLI is properly configured.*
+
