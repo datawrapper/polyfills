@@ -112,7 +112,6 @@ workflows:
               ignore: /.*/
 
       - deploy_polyfills:
-          context: Deployment Keys
           requires:
             - test
             - lint
