@@ -32,10 +32,20 @@ Object.keys(versions).forEach(browser => {
 
 const q = queue(10);
 
+// add features here that are not in the bundles by default
+const features = [
+    'Array.prototype.includes',
+    'Array.prototype.find',
+    'Array.prototype.findIndex',
+    'fetch'
+];
+
 const load = (key, ua, callback) => {
     console.log('loading', key);
     request(
-        `https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features=default,Array.prototype.includes,fetch&ua=${ua}`,
+        `https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features=default,${features.join(
+            ','
+        )},fetch&ua=${ua}`,
         (err, res, body) => {
             if (!err) {
                 fs.writeFile(`polyfills/${key}.js`, body, err => {
