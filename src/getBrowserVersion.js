@@ -1,16 +1,8 @@
-const { getLatestStableBrowsers } = require('caniuse-api');
-
 function getVersion (RE) {
     return function (userAgent) {
         const raw = userAgent.toLowerCase().match(RE);
         return raw ? parseInt(raw[1], 10) : false;
     };
-}
-
-export function getLatestVersionNumber (browser) {
-    return +getLatestStableBrowsers()
-        .find(val => val.includes(browser))
-        .split(' ')[1];
 }
 
 export default {

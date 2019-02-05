@@ -2,7 +2,8 @@ import test from 'ava';
 import ua from 'useragent-generator';
 import range from 'lodash.range';
 
-import getBrowserVersion, { getLatestVersionNumber } from './getBrowserVersion.js';
+import getBrowserVersion from './getBrowserVersion.js';
+import { getLatestVersionNumber } from '../scripts/download-polyfills.js';
 
 const browsers = {
     firefox: [30, getLatestVersionNumber('firefox')],
