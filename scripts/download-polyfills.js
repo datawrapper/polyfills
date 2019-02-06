@@ -37,7 +37,7 @@ const features = [
     'Array.prototype.includes',
     'Array.prototype.find',
     'Array.prototype.findIndex',
-    'Object.prototype.values',
+    'Object.values',
     'fetch'
 ];
 
