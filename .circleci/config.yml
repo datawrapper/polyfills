@@ -1,122 +1,116 @@
 defaults: &defaults
-  working_directory: ~/repo
-  docker:
-    - image: circleci/node:10
-
-python: &python
-  working_directory: ~/repo
-  docker:
-    - image: circleci/python:2.7-jessie
+    working_directory: ~/repo
+    docker:
+        - image: sto3psl/dw-ci:1.1.0
 
 cache: &cache
     key: v1-dependency-cache-{{ checksum "package-lock.json" }}
 
 version: 2
 jobs:
-  install:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          <<: *cache
+    install:
+        <<: *defaults
+        steps:
+            - checkout
+            - restore_cache:
+                  <<: *cache
 
-      - run: npm ci
+            - run: npm ci
 
-      - save_cache:
-          <<: *cache
-          paths:
-            - node_modules
-  test:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          <<: *cache
+            - save_cache:
+                  <<: *cache
+                  paths:
+                      - node_modules
+    test:
+        <<: *defaults
+        steps:
+            - checkout
+            - restore_cache:
+                  <<: *cache
 
-      - run:
-          command: |
-            mkdir -p ~/reports/ava
-            npm test -- --tap | npx tap-xunit > ~/reports/ava/results.xml
-      - store_test_results:
-          path: ~/reports
-      - store_artifacts:
-          path: ~/reports
+            - run:
+                  command: |
+                      mkdir -p ~/reports/ava
+                      npm test -- --tap | npx tap-xunit > ~/reports/ava/results.xml
+            - store_test_results:
+                  path: ~/reports
+            - store_artifacts:
+                  path: ~/reports
 
+    lint:
+        <<: *defaults
+        steps:
+            - checkout
+            - restore_cache:
+                  <<: *cache
 
-  lint:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          <<: *cache
+            - run: npm run lint
 
-      - run: npm run lint
+    publish:
+        <<: *defaults
+        steps:
+            - checkout
+            - restore_cache:
+                  <<: *cache
 
-  publish:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          <<: *cache
+            - run:
+                  name: Authenticate with registry
+                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+            - run:
+                  name: Publish Package
+                  command: npm publish
 
-      - run:
-          name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - run:
-          name: Publish Package
-          command: npm publish
-
-  deploy_polyfills:
-      <<: *python
-      steps:
-        - checkout
-        - run:
-            name: Install AWS CLI
-            command: sudo pip install awscli
-        - run:
-            name: Upload to S3
-            command: aws s3 cp --acl public-read --recursive ~/repo/polyfills/ s3://datawrapper.dwcdn.net/lib/polyfills/
+    deploy_polyfills:
+        <<: *defaults
+        steps:
+            - checkout
+            - run:
+                  name: Install AWS CLI
+                  command: sudo pip install awscli
+            - run:
+                  name: Upload to S3
+                  command: aws s3 cp --acl public-read --recursive ~/repo/polyfills/ s3://datawrapper.dwcdn.net/lib/polyfills/
 
 workflows:
-  version: 2
-  install, test, lint, and publish:
-    jobs:
-      - install:
-          filters:
-            tags:
-              only: /^v.*/
+    version: 2
+    install, test, lint, and publish:
+        jobs:
+            - install:
+                  filters:
+                      tags:
+                          only: /^v.*/
 
-      - test:
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - install
+            - test:
+                  filters:
+                      tags:
+                          only: /^v.*/
+                  requires:
+                      - install
 
-      - lint:
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - install
+            - lint:
+                  filters:
+                      tags:
+                          only: /^v.*/
+                  requires:
+                      - install
 
-      - publish:
-          context: Deployment Keys
-          requires:
-            - test
-            - lint
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+            - publish:
+                  context: Deployment Keys
+                  requires:
+                      - test
+                      - lint
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          ignore: /.*/
 
-      - deploy_polyfills:
-          requires:
-            - test
-            - lint
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+            - deploy_polyfills:
+                  requires:
+                      - test
+                      - lint
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          ignore: /.*/
