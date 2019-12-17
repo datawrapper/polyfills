@@ -38,8 +38,11 @@ const features = [
     'Array.prototype.find',
     'Array.prototype.findIndex',
     'Object.values',
+    'Object.assign',
+    'Symbol',
     'fetch',
-    'Number.isFinite'
+    'Number.isFinite',
+    'Math.sign'
 ];
 
 const load = (key, ua, callback) => {
