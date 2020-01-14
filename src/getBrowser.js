@@ -1,6 +1,8 @@
 import getVersion from './getBrowserVersion.js';
 
 export default function () {
+    const userAgent = navigator.userAgent;
+
     // Firefox 1.0+
     const isFirefox = typeof InstallTrigger !== 'undefined';
 
@@ -17,8 +19,10 @@ export default function () {
     // Edge 20+
     const isEdge = !isIE && !!window.StyleMedia;
 
-    // Chrome or Chromium 1+
-    const isChrome = !!window.chrome && !!window.chrome.loadTimes;
+    // Chrome, Chromium 1+ or Chrome WebView
+    const isChromeBrowser = !!window.chrome && !!window.chrome.loadTimes;
+    const isChromeWebView = /; wv/.test(userAgent) && /Chrome/.test(userAgent);
+    const isChrome = isChromeBrowser || isChromeWebView;
 
     const browser = isChrome
         ? 'chrome'
@@ -32,8 +36,7 @@ export default function () {
                         ? 'edge'
                         : false;
 
-    const version =
-        browser && getVersion[browser] ? getVersion[browser](navigator.userAgent) : false;
+    const version = browser && getVersion[browser] ? getVersion[browser](userAgent) : false;
 
     return { browser: browser, version: version };
 }
