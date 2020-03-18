@@ -16,25 +16,25 @@
     "build": "microbundle --name=getBrowser",
     "download": "node -r esm scripts/download-polyfills.js",
     "upload": "make upload",
-    "lint": "healthier {src,scripts}/*.js",
-    "format": "prettier src/**/*.js scripts/*.js --write && healthier {src,scripts}/*.js --fix"
+    "lint": "healthier **/*.js",
+    "format": "prettier **/*.js --write && healthier **/*.js --fix"
   },
   "author": "Gregor Aisch",
   "license": "ISC",
   "devDependencies": {
-    "ava": "~1.0.1",
+    "ava": "~3.5.0",
     "babel-eslint": "~10.1.0",
     "caniuse-api": "^3.0.0",
     "d3-queue": "~3.0.7",
-    "esm": "~3.0.84",
+    "esm": "~3.2.25",
     "healthier": "~3.3.0",
-    "husky": "~1.3.1",
-    "lint-staged": "~8.1.0",
+    "husky": "~4.2.3",
+    "lint-staged": "~10.0.8",
     "lodash.range": "~3.2.0",
-    "microbundle": "~0.9.0",
-    "prettier": "~1.15.3",
-    "request": "~2.88.0",
-    "tap-xunit": "~2.3.0",
+    "microbundle": "~0.11.0",
+    "prettier": "~1.19.1",
+    "request": "~2.88.2",
+    "tap-xunit": "~2.4.1",
     "useragent-generator": "~1.1.0"
   },
   "ava": {
@@ -54,15 +54,9 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "*.js": [
-        "prettier --write",
-        "eslint --fix",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "**/polyfills/*.js"
+    "*.js": [
+      "prettier --write",
+      "healthier --fix"
     ]
   }
 }
