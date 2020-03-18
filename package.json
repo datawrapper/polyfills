@@ -7,7 +7,8 @@
   "umd:main": "dist/getBrowser.umd.js",
   "source": "src/getBrowser.js",
   "files": [
-    "dist"
+    "dist",
+    "polyfills"
   ],
   "scripts": {
     "prepublishOnly": "npm test && npm run build",
