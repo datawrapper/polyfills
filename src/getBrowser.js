@@ -1,6 +1,9 @@
 import getVersion from './getBrowserVersion.js';
+import polyfills from './availablePolyfills.js';
 
-export default function getBrowser () {
+export const availablePolyfills = polyfills;
+
+export function getBrowser () {
     const userAgent = navigator.userAgent;
 
     // Firefox 1.0+

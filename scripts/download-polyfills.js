@@ -49,6 +49,14 @@ const features = [
     'Math.sign'
 ];
 
+const availablePolyfills = {
+    firefox: [],
+    chrome: [],
+    ie: [],
+    edge: [],
+    safari: []
+};
+
 async function load (key, ua) {
     console.log('loading', key);
     const { body } = await request(
@@ -59,6 +67,10 @@ async function load (key, ua) {
 
     const hasPolyfills = !!body.replace(/\/\*.*\*\//g, '').trim();
     if (hasPolyfills) {
+        const [browser, version] = key.split('-');
+        if (availablePolyfills[browser]) {
+            availablePolyfills[browser].push(Number(version));
+        }
         await fs.writeFile(`polyfills/${key}.js`, body);
     }
 }
@@ -68,6 +80,17 @@ async function main () {
         await load(browser, ua);
     }
     await load('all', 'all-browsers');
+    Object.entries(availablePolyfills).forEach(([key, values]) => {
+        availablePolyfills[key] = [Math.min(...values), Math.max(...values)];
+    });
+
+    await fs.writeFile(
+        'src/availablePolyfills.js',
+        `/*
+  This file is auto generated. Please run \`npm run download\` to update.
+*/
+export default ${JSON.stringify(availablePolyfills)}`
+    );
     console.log('all done!');
 }
 
