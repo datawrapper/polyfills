@@ -1,6 +1,6 @@
 import getVersion from './getBrowserVersion.js';
 
-export default function () {
+export default function getBrowser () {
     const userAgent = navigator.userAgent;
 
     // Firefox 1.0+
@@ -11,7 +11,7 @@ export default function () {
         /constructor/i.test(window.HTMLElement) ||
         (function (p) {
             return p.toString() === '[object SafariRemoteNotification]';
-        })(!window['safari'] || window.safari.pushNotification);
+        })(!window.safari || window.safari.pushNotification);
 
     // Internet Explorer 6-11
     const isIE = /* @cc_on!@ */ false || !!document.documentMode;
