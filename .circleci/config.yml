@@ -1,114 +1,72 @@
-defaults: &defaults
-    working_directory: ~/repo
-    docker:
-        - image: sto3psl/dw-ci:1.4.0
+version: 2.1
 
-cache: &cache
-    key: v1-dependency-cache-{{ checksum "package-lock.json" }}
+# https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-executors
+executors:
+    dw-executor:
+        working_directory: ~/repo
+        docker:
+            - image: sto3psl/dw-ci:1.4.0
 
-version: 2
+# https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+commands:
+    restore_npm_cache:
+        description: Restores .npm directory for faster installs
+        steps:
+            - restore_cache:
+                  keys:
+                      - v4-install-cache-{{ checksum "package-lock.json" }}
+                      - v4-install-cache
+
 jobs:
-    install:
-        <<: *defaults
+    test:
+        executor: dw-executor
         steps:
             - checkout
-            - restore_cache:
-                  <<: *cache
+            - restore_npm_cache
 
-            - run: npm ci
+            - run:
+                    environment:
+                        HUSKY_SKIP_INSTALL: 1
+                    command: npm ci
+
+            - run:
+                    name: Lint code
+                    command: npm run lint
+            - run:
+                    name: Run tests
+                    command: |
+                        mkdir -p ~/reports/ava
+                        npm test -- --tap | npx tap-xunit > ~/reports/ava/results.xml
 
             - save_cache:
-                  <<: *cache
-                  paths:
-                      - node_modules
-    test:
-        <<: *defaults
-        steps:
-            - checkout
-            - restore_cache:
-                  <<: *cache
-
-            - run:
-                  command: |
-                      mkdir -p ~/reports/ava
-                      npm test -- --tap | npx tap-xunit > ~/reports/ava/results.xml
-            - store_test_results:
-                  path: ~/reports
-            - store_artifacts:
-                  path: ~/reports
-
-    lint:
-        <<: *defaults
-        steps:
-            - checkout
-            - restore_cache:
-                  <<: *cache
-
-            - run: npm run lint
+                    key: v4-install-cache-{{ checksum "package-lock.json" }}
+                    paths:
+                        - ~/.npm
 
     publish:
-        <<: *defaults
+        executor: dw-executor
         steps:
             - checkout
-            - restore_cache:
-                  <<: *cache
 
             - run:
-                  name: Authenticate with registry
-                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+                    name: Authenticate with registry
+                    command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
             - run:
-                  name: Publish Package
-                  command: npm publish
-
-    deploy_polyfills:
-        <<: *defaults
-        steps:
-            - checkout
-            - run:
-                  name: Install AWS CLI
-                  command: sudo pip install awscli
-            - run:
-                  name: Upload to S3
-                  command: aws s3 cp --acl public-read --recursive ~/repo/polyfills/ s3://datawrapper.dwcdn.net/lib/polyfills/
+                    name: Publish Package
+                    command: npm publish
 
 workflows:
-    version: 2
-    install, test, lint, and publish:
+    test and publish:
         jobs:
-            - install:
-                  filters:
-                      tags:
-                          only: /^v.*/
-
             - test:
                   filters:
                       tags:
                           only: /^v.*/
-                  requires:
-                      - install
-
-            - lint:
-                  filters:
-                      tags:
-                          only: /^v.*/
-                  requires:
-                      - install
 
             - publish:
                   context: Deployment Keys
                   requires:
                       - test
-                      - lint
-                  filters:
-                      tags:
-                          only: /^v.*/
-                      branches:
-                          ignore: /.*/
-
-            - deploy_polyfills:
-                  requires:
-                      - test
-                      - lint
                   filters:
                       tags:
                           only: /^v.*/
