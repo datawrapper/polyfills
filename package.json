@@ -1,13 +1,14 @@
 {
   "name": "@datawrapper/polyfills",
-  "version": "1.7.0",
+  "version": "2.0.0-0",
   "description": "",
   "main": "dist/getBrowser.js",
   "module": "dist/getBrowser.mjs",
   "umd:main": "dist/getBrowser.umd.js",
   "source": "src/getBrowser.js",
   "files": [
-    "dist"
+    "dist",
+    "polyfills"
   ],
   "scripts": {
     "prepublishOnly": "npm test && npm run build",
@@ -16,30 +17,24 @@
     "build": "microbundle --name=getBrowser",
     "download": "node -r esm scripts/download-polyfills.js",
     "upload": "make upload",
-    "lint": "eslint src scripts",
-    "format": "prettier src/**/*.js scripts/*.js --write && eslint src scripts --fix"
+    "lint": "healthier **/*.js",
+    "format": "prettier **/*.js --write && healthier **/*.js --fix"
   },
   "author": "Gregor Aisch",
   "license": "ISC",
   "devDependencies": {
-    "ava": "~1.0.1",
-    "babel-eslint": "^10.0.1",
+    "ava": "~3.5.0",
+    "babel-eslint": "~10.1.0",
     "caniuse-api": "^3.0.0",
-    "d3-queue": "~3.0.7",
-    "eslint": "~5.12.0",
-    "eslint-config-standard": "~12.0.0",
-    "eslint-plugin-import": "~2.14.0",
-    "eslint-plugin-node": "~8.0.1",
-    "eslint-plugin-promise": "~4.0.1",
-    "eslint-plugin-standard": "~4.0.0",
-    "esm": "~3.0.84",
-    "husky": "~1.3.1",
-    "lint-staged": "~8.1.0",
+    "esm": "~3.2.25",
+    "healthier": "~3.3.0",
+    "husky": "~4.2.3",
+    "lint-staged": "~10.0.8",
     "lodash.range": "~3.2.0",
-    "microbundle": "~0.9.0",
-    "prettier": "~1.15.3",
-    "request": "~2.88.0",
-    "tap-xunit": "~2.3.0",
+    "microbundle": "~0.11.0",
+    "prettier": "~1.19.1",
+    "request": "~2.88.2",
+    "tap-xunit": "~2.4.1",
     "useragent-generator": "~1.1.0"
   },
   "ava": {
@@ -59,15 +54,9 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "*.js": [
-        "prettier --write",
-        "eslint --fix",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "**/polyfills/*.js"
+    "*.js": [
+      "prettier --write",
+      "healthier --fix"
     ]
   }
 }
