@@ -46,7 +46,8 @@ const features = [
     'Symbol',
     'fetch',
     'Number.isFinite',
-    'Math.sign'
+    'Math.sign',
+    'NodeList.prototype.forEach'
 ];
 
 const availablePolyfills = {
