@@ -25,7 +25,8 @@ export function getBrowser () {
     // Chrome, Chromium 1+ or Chrome WebView
     const isChromeBrowser = !!window.chrome && !!window.chrome.loadTimes;
     const isChromeWebView = /; wv/.test(userAgent) && /Chrome/.test(userAgent);
-    const isChrome = isChromeBrowser || isChromeWebView;
+    const isSamsungInternet = /SAMSUNG/.test(userAgent) && /Chrome/.test(userAgent);
+    const isChrome = isChromeBrowser || isChromeWebView || isSamsungInternet;
 
     const browser = isChrome
         ? 'chrome'
