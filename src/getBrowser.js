@@ -23,7 +23,7 @@ export function getBrowser () {
     const isEdge = !isIE && !!window.StyleMedia;
 
     // Chrome, Chromium 1+ or Chrome WebView
-    const isChromeBrowser = !!window.chrome && !!window.chrome.loadTimes;
+    const isChromeBrowser = /HeadlessChrome/.test(userAgent) || !!window.chrome && !!window.chrome.loadTimes;
     const isChromeWebView = /; wv/.test(userAgent) && /Chrome/.test(userAgent);
     const isSamsungInternet = /SAMSUNG/.test(userAgent) && /Chrome/.test(userAgent);
     const isChrome = isChromeBrowser || isChromeWebView || isSamsungInternet;
