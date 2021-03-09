@@ -1,62 +1,64 @@
 {
-  "name": "@datawrapper/polyfills",
-  "version": "2.1.0",
-  "description": "",
-  "main": "dist/getBrowser.js",
-  "module": "dist/getBrowser.mjs",
-  "umd:main": "dist/getBrowser.umd.js",
-  "source": "src/getBrowser.js",
-  "files": [
-    "dist",
-    "polyfills"
-  ],
-  "scripts": {
-    "prepublishOnly": "npm test && npm run build",
-    "test": "ava",
-    "dev": "microbundle --watch",
-    "build": "microbundle --name=getBrowser",
-    "download": "node -r esm scripts/download-polyfills.js",
-    "upload": "make upload",
-    "lint": "healthier **/*.js",
-    "format": "prettier **/*.js --write && healthier **/*.js --fix"
-  },
-  "author": "Gregor Aisch",
-  "license": "ISC",
-  "devDependencies": {
-    "ava": "~3.10.1",
-    "babel-eslint": "~10.1.0",
-    "caniuse-api": "^3.0.0",
-    "esm": "~3.2.25",
-    "healthier": "~4.0.0",
-    "husky": "~4.2.5",
-    "lint-staged": "~10.2.11",
-    "lodash.range": "~3.2.0",
-    "microbundle": "~0.12.3",
-    "prettier": "~1.19.1",
-    "request": "~2.88.2",
-    "tap-xunit": "~2.4.1",
-    "useragent-generator": "~1.1.0"
-  },
-  "ava": {
-    "require": [
-      "esm"
-    ]
-  },
-  "prettier": {
-    "tabWidth": 4,
-    "semi": true,
-    "printWidth": 100,
-    "singleQuote": true
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "name": "@datawrapper/polyfills",
+    "version": "2.1.0",
+    "description": "",
+    "main": "dist/getBrowser.js",
+    "module": "dist/getBrowser.mjs",
+    "umd:main": "dist/getBrowser.umd.js",
+    "source": "src/getBrowser.js",
+    "files": [
+        "dist",
+        "polyfills"
+    ],
+    "scripts": {
+        "prepublishOnly": "npm test && npm run build",
+        "test": "ava",
+        "dev": "microbundle --watch",
+        "build": "microbundle --name=getBrowser",
+        "download": "node -r esm scripts/download-polyfills.js",
+        "upload": "make upload",
+        "lint": "healthier **/*.js && prettier --check **/*.js",
+        "format": "healthier --fix **/*.js && prettier --write **/*.js"
+    },
+    "author": "Gregor Aisch",
+    "license": "ISC",
+    "devDependencies": {
+        "ava": "~3.10.1",
+        "babel-eslint": "~10.1.0",
+        "caniuse-api": "^3.0.0",
+        "esm": "~3.2.25",
+        "healthier": "~4.0.0",
+        "husky": "~4.2.5",
+        "lint-staged": "~10.2.11",
+        "lodash.range": "~3.2.0",
+        "microbundle": "~0.12.3",
+        "prettier": "^2.2.1",
+        "request": "~2.88.2",
+        "tap-xunit": "~2.4.1",
+        "useragent-generator": "~1.1.0"
+    },
+    "ava": {
+        "require": [
+            "esm"
+        ]
+    },
+    "prettier": {
+        "arrowParens": "avoid",
+        "printWidth": 100,
+        "semi": true,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "trailingComma": "none"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js": [
+            "healthier",
+            "prettier --check"
+        ]
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "healthier --fix"
-    ]
-  }
 }
