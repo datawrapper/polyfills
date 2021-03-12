@@ -1,4 +1,4 @@
-function getVersion (RE) {
+function getVersion(RE) {
     return function (userAgent) {
         const raw = userAgent.toLowerCase().match(RE);
         return raw ? parseInt(raw[1], 10) : false;

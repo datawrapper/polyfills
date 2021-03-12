@@ -8,7 +8,7 @@ const { getLatestStableBrowsers } = require('caniuse-api');
 
 const request = promisify(require('request'));
 
-export function getLatestVersionNumber (browser) {
+export function getLatestVersionNumber(browser) {
     return +getLatestStableBrowsers()
         .find(val => val.includes(browser))
         .split(' ')[1];
@@ -62,7 +62,7 @@ const availablePolyfills = {
     safari: []
 };
 
-async function load (key, ua) {
+async function load(key, ua) {
     console.log('loading', key);
     const { body } = await request(
         `https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features=default,${features.join(
@@ -80,7 +80,7 @@ async function load (key, ua) {
     }
 }
 
-async function main () {
+async function main() {
     for (const [browser, ua] of browsers) {
         await load(browser, ua);
     }

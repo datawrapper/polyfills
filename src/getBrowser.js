@@ -3,7 +3,7 @@ import polyfills from './availablePolyfills.js';
 
 export const availablePolyfills = polyfills;
 
-export function getBrowser () {
+export function getBrowser() {
     const userAgent = navigator.userAgent;
 
     // Firefox 1.0+
@@ -23,7 +23,8 @@ export function getBrowser () {
     const isEdge = !isIE && !!window.StyleMedia;
 
     // Chrome, Chromium 1+ or Chrome WebView
-    const isChromeBrowser = !!window.chrome && !!window.chrome.loadTimes;
+    const isChromeBrowser =
+        /HeadlessChrome/.test(userAgent) || (!!window.chrome && !!window.chrome.loadTimes);
     const isChromeWebView = /; wv/.test(userAgent) && /Chrome/.test(userAgent);
     const isSamsungInternet = /SAMSUNG/.test(userAgent) && /Chrome/.test(userAgent);
     const isChrome = isChromeBrowser || isChromeWebView || isSamsungInternet;
@@ -31,14 +32,14 @@ export function getBrowser () {
     const browser = isChrome
         ? 'chrome'
         : isFirefox
-            ? 'firefox'
-            : isSafari
-                ? 'safari'
-                : isIE
-                    ? 'ie'
-                    : isEdge
-                        ? 'edge'
-                        : false;
+        ? 'firefox'
+        : isSafari
+        ? 'safari'
+        : isIE
+        ? 'ie'
+        : isEdge
+        ? 'edge'
+        : false;
 
     const version = browser && getVersion[browser] ? getVersion[browser](userAgent) : false;
 
